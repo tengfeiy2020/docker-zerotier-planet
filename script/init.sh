@@ -7,7 +7,7 @@ npm config set registry https://registry.npm.taobao.org
 npm install -g node-gyp
 
 # curl -s https://install.zerotier.com | bash
-curl -s 'https://ghpoxy.markxu.vip/https://raw.githubusercontent.com/zerotier/ZeroTierOne/master/doc/contact%40zerotier.com.gpg' | gpg --import &&
+curl -s 'https://ghpoxy.markxu.online/https://raw.githubusercontent.com/zerotier/ZeroTierOne/master/doc/contact%40zerotier.com.gpg' | gpg --import &&
      if z=$(curl -s 'https://install.zerotier.com/' | gpg); then echo "$z" | sudo bash; fi
 
 mkdir /app -p
