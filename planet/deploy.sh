@@ -2,15 +2,15 @@
 
 imageName="zerotier-planet"
 
-function install() {
-  read -p "请输入zerotier-planet要使用的端口号,例如9994（数字）: " port
+install() {
+  read -p "请输入zerotier-planet要使用的端口号,例如9994(数字): " port
 
   # 确保端口号是数字
   while ! [[ "$port" =~ ^[0-9]+$ ]]; do
   read -p "端口号必须是数字，请重新输入端口号: " port
   done
 
-  read -p "是否自动获取公网IP地址？（y/n）" use_auto_ip
+  read -p "是否自动获取公网IP地址？(y/n)" use_auto_ip
 
   if [[ "$use_auto_ip" =~ ^[Yy]$ ]]; then
     ipv4=$(curl -s https://ipv4.icanhazip.com/)
@@ -19,17 +19,16 @@ function install() {
     echo "获取到的IPv4地址为: $ipv4"
     echo "获取到的IPv6地址为: $ipv6"
 
-    read -p "是否使用上面获取到的IP地址？（y/n）" use_auto_ip_result
+    read -p "是否使用上面获取到的IP地址？(y/n)" use_auto_ip_result
 
     if [[ "$use_auto_ip_result" =~ ^[Nn]$ ]]; then
       read -p "请输入IPv4地址: " ipv4
-      read -p "请输入IPv6地址（可留空）: " ipv6
+      read -p "请输入IPv6地址(可留空): " ipv6
     fi
   else
-
     # 要求用户手动输入IP地址
     read -p "请输入IPv4地址: " ipv4
-    read -p "请输入IPv6地址（可留空）: " ipv6
+    read -p "请输入IPv6地址(可留空): " ipv6
   fi
 
   # 输出使用的端口号和IP地址
@@ -40,10 +39,10 @@ function install() {
   else
     endpoints="[\"$ipv4_entry\"]"
   fi
-  echo "{\"stableEndpoints\":$endpoints}" > ./patch/patch.json
+  echo "{\"stableEndpoints\":$endpoints}" > ./patch.json
 
   echo "配置内容为:"
-  echo "`cat ./patch/patch.json`"
+  echo "`cat ./patch.json`"
 
   echo "开始安装..."
   echo "清除原有内容"
