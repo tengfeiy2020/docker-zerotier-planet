@@ -1,7 +1,7 @@
 FROM alpine:3.14 as builder
 
 ENV TZ=Asia/Shanghai
-ARG TAG=main
+ARG TAG=actions
 ENV TAG=${TAG}
 
 WORKDIR /app
@@ -12,7 +12,7 @@ ADD ./patch/mkworld_custom.cpp /app/patch/mkworld_custom.cpp
 # init tool
 RUN set -x\
     && apk update\
-    && apk add --no-cache git python3 npm make g++ linux-headers curl pkgconfig openssl-dev  jq build-base  gcc \
+    && apk add --no-cache git python3 npm make g++ linux-headers curl pkgconfig openssl-dev jq build-base gcc cmake go \
     && echo "env prepare success!"
 
 # make zerotier-one
@@ -27,14 +27,16 @@ RUN set -x\
     && make -j\
     && make install\
     && echo "make success!"\
-    ; zerotier-one -d  \
-    ; sleep 5s && ps -ef |grep zerotier-one |grep -v grep |awk '{print $1}' |xargs kill -9\
+    && zerotier-one -d || true\
+    && sleep 5s\
+    && (ps -ef |grep zerotier-one |grep -v grep |awk '{print $1}' |xargs kill -9 || true)\
     && echo "zerotier-one init success!"\
-    && cd ./attic/world \
+    && cd /app/ZeroTierOne/attic/world \
     && cp /app/patch/mkworld_custom.cpp .\
     && mv mkworld.cpp mkworld.cpp.bak \
     && mv mkworld_custom.cpp mkworld.cpp \
     && sh build.sh \
+    && mkdir -p /var/lib/zerotier-one \
     && mv mkworld /var/lib/zerotier-one\
     && echo "mkworld build success!"
 
